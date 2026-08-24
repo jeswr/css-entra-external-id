@@ -1,0 +1,11 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld"
+  ],
+  "import": [
+    "css:config/identity/handler/default.json",
+    "entra:config/enable.json"
+  ],
+  "@graph": [{ "comment": "Adds Microsoft Entra External ID as a CSS account login method." }]
+}

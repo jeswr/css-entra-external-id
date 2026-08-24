@@ -1,0 +1,36 @@
+<h1>Log in with Microsoft Entra</h1>
+<form method="post" id="mainForm">
+  <p class="error" id="error"></p>
+
+  <p>You will be redirected to your organization's identity service.</p>
+  <p class="checkbox">
+    <label><input type="checkbox" name="remember" value="true" checked>Stay logged in</label>
+  </p>
+
+  <p class="actions">
+    <button type="submit" name="submit" disabled>Continue with Microsoft</button>
+    <button class="hidden" type="button" id="cancel">Cancel</button>
+  </p>
+</form>
+
+<script>
+  (async() => {
+    const nonceStorageKey = 'css-entra-external-id-browser-nonce';
+    const controls = await fetchControls('<%= idpIndex %>');
+
+    setVisibility('cancel', <%= authenticating %>);
+    getElements('cancel').cancel.addEventListener('click', async() => {
+      const res = await fetch(controls.oidc.cancel, { method: 'POST' });
+      location.href = (await res.json()).location;
+    });
+
+    addPostListener(async() => {
+      const browserNonce = crypto.randomUUID();
+      sessionStorage.setItem(nonceStorageKey, browserNonce);
+      await postJsonForm('', true, (json) => Object.assign(json, {
+        browserNonce,
+        remember: Boolean(json.remember),
+      }));
+    });
+  })();
+</script>

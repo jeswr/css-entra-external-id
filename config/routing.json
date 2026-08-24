@@ -1,0 +1,135 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/asynchronous-handlers/^1.0.0/components/context.jsonld"
+  ],
+  "@graph": [
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdClient",
+      "@type": "MsalEntraExternalIdClient",
+      "args_authority": { "@id": "urn:solid-server:entra:variable:authority" },
+      "args_callbackRoute": { "@id": "urn:solid-server:default:EntraExternalIdCallbackRoute" },
+      "args_clientId": { "@id": "urn:solid-server:entra:variable:clientId" },
+      "args_clientSecret": { "@id": "urn:solid-server:entra:variable:clientSecret" },
+      "args_clientCertificateThumbprint": { "@id": "urn:solid-server:entra:variable:clientCertificateThumbprint" },
+      "args_clientCertificatePrivateKey": { "@id": "urn:solid-server:entra:variable:clientCertificatePrivateKey" },
+      "args_expectedIssuer": { "@id": "urn:solid-server:entra:variable:expectedIssuer" }
+    },
+    {
+      "@id": "urn:solid-server:default:LoginEntraExternalIdRoute",
+      "@type": "RelativePathInteractionRoute",
+      "base": { "@id": "urn:solid-server:default:LoginRoute" },
+      "relativePath": "entra-external-id/"
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdCallbackRoute",
+      "@type": "RelativePathInteractionRoute",
+      "base": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" },
+      "relativePath": "callback/"
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdFinalizeBaseRoute",
+      "@type": "RelativePathInteractionRoute",
+      "base": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" },
+      "relativePath": "finalize/"
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdFinalizeRoute",
+      "@type": "IdInteractionRoute",
+      "base": { "@id": "urn:solid-server:default:EntraExternalIdFinalizeBaseRoute" },
+      "idName": "entraTicket"
+    },
+    {
+      "comment": "Starts the Entra External ID redirect flow.",
+      "@id": "urn:solid-server:default:LoginEntraExternalIdRouter",
+      "@type": "InteractionRouteHandler",
+      "route": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" },
+      "source": {
+        "@type": "ViewInteractionHandler",
+        "source": {
+          "@id": "urn:solid-server:default:EntraExternalIdLoginHandler",
+          "@type": "EntraExternalIdLoginHandler",
+          "args_client": { "@id": "urn:solid-server:default:EntraExternalIdClient" },
+          "args_stateStorage": { "@id": "urn:solid-server:default:EntraExternalIdStateStorage" }
+        }
+      }
+    },
+    {
+      "comment": "Consumes the same-site one-time ticket and completes CSS login.",
+      "@id": "urn:solid-server:default:EntraExternalIdFinalizeRouter",
+      "@type": "InteractionRouteHandler",
+      "route": { "@id": "urn:solid-server:default:EntraExternalIdFinalizeRoute" },
+      "source": {
+        "@type": "ViewInteractionHandler",
+        "source": {
+          "@id": "urn:solid-server:default:EntraExternalIdFinalizeHandler",
+          "@type": "EntraExternalIdFinalizeHandler",
+          "args_accountStore": { "@id": "urn:solid-server:default:AccountStore" },
+          "args_autoProvision": { "@id": "urn:solid-server:entra:variable:autoProvision" },
+          "args_cookieStore": { "@id": "urn:solid-server:default:CookieStore" },
+          "args_entraStore": { "@id": "urn:solid-server:default:EntraExternalIdStore" },
+          "args_finalizeRoute": { "@id": "urn:solid-server:default:EntraExternalIdFinalizeRoute" },
+          "args_locker": { "@id": "urn:solid-server:default:ResourceLocker" },
+          "args_ticketStorage": { "@id": "urn:solid-server:default:EntraExternalIdTicketStorage" }
+        }
+      }
+    },
+    {
+      "@id": "urn:solid-server:default:InteractionRouteHandler",
+      "@type": "StatusWaterfallHandler",
+      "handlers": [
+        { "@id": "urn:solid-server:default:LoginEntraExternalIdRouter" },
+        { "@id": "urn:solid-server:default:EntraExternalIdFinalizeRouter" }
+      ]
+    },
+    {
+      "comment": "Handles Entra's cross-site form POST before CSS's JSON interaction wrappers.",
+      "@id": "urn:solid-server:default:EntraExternalIdCallbackHandler",
+      "@type": "EntraExternalIdCallbackHandler",
+      "args_callbackRoute": { "@id": "urn:solid-server:default:EntraExternalIdCallbackRoute" },
+      "args_client": { "@id": "urn:solid-server:default:EntraExternalIdClient" },
+      "args_converter": { "@id": "urn:solid-server:default:RepresentationConverter" },
+      "args_finalizeRoute": { "@id": "urn:solid-server:default:EntraExternalIdFinalizeRoute" },
+      "args_stateStorage": { "@id": "urn:solid-server:default:EntraExternalIdStateStorage" },
+      "args_ticketStorage": { "@id": "urn:solid-server:default:EntraExternalIdTicketStorage" }
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdInteractionHandler",
+      "@type": "StatusWaterfallHandler",
+      "handlers": [
+        { "@id": "urn:solid-server:default:EntraExternalIdCallbackHandler" },
+        { "@id": "urn:solid-server:default:InteractionHandler" }
+      ]
+    },
+    {
+      "@id": "urn:solid-server:default:IdentityProviderHttpHandler",
+      "@type": "IdentityProviderHttpHandler",
+      "handler": { "@id": "urn:solid-server:default:EntraExternalIdInteractionHandler" }
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdControlHandler",
+      "@type": "ControlHandler",
+      "controls": [{
+        "ControlHandler:_controls_key": "login",
+        "ControlHandler:_controls_value": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" }
+      }]
+    },
+    {
+      "@id": "urn:solid-server:default:HtmlViewHandler",
+      "@type": "HtmlViewHandler",
+      "templates": [
+        {
+          "@id": "urn:solid-server:default:EntraExternalIdLoginHtml",
+          "@type": "EntraExternalIdLoginHtmlViewEntry",
+          "route": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" }
+        },
+        {
+          "@id": "urn:solid-server:default:EntraExternalIdFinalizeHtml",
+          "@type": "EntraExternalIdFinalizeHtmlViewEntry",
+          "route": { "@id": "urn:solid-server:default:EntraExternalIdFinalizeRoute" }
+        }
+      ]
+    }
+  ]
+}

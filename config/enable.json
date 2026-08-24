@@ -1,0 +1,58 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld"
+  ],
+  "import": [
+    "entra:config/cli.json",
+    "entra:config/resolver.json",
+    "entra:config/routing.json",
+    "entra:config/storage.json"
+  ],
+  "@graph": [
+    {
+      "@id": "urn:solid-server:default:LoginHandler",
+      "@type": "ControlHandler",
+      "controls": [{
+        "ControlHandler:_controls_key": "Microsoft Entra External ID",
+        "ControlHandler:_controls_value": { "@id": "urn:solid-server:default:LoginEntraExternalIdRoute" }
+      }]
+    },
+    {
+      "@id": "urn:solid-server:default:ControlHandler",
+      "@type": "ControlHandler",
+      "controls": [{
+        "ControlHandler:_controls_key": "entraExternalId",
+        "ControlHandler:_controls_value": { "@id": "urn:solid-server:default:EntraExternalIdControlHandler" }
+      }]
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:authority",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:clientId",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:clientSecret",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:clientCertificateThumbprint",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:clientCertificatePrivateKey",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:expectedIssuer",
+      "@type": "Variable"
+    },
+    {
+      "@id": "urn:solid-server:entra:variable:autoProvision",
+      "@type": "Variable"
+    }
+  ]
+}

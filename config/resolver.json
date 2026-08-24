@@ -1,0 +1,40 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld"
+  ],
+  "@graph": [{
+    "@id": "urn:solid-server-app-setup:default:ShorthandResolver",
+    "@type": "CombinedShorthandResolver",
+    "resolvers": [
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:authority",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraAuthority" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:clientId",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraClientId" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:clientSecret",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraClientSecret", "defaultValue": "" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:clientCertificateThumbprint",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraClientCertificateThumbprint", "defaultValue": "" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:clientCertificatePrivateKey",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraClientCertificatePrivateKey", "defaultValue": "" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:expectedIssuer",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraExpectedIssuer" }
+      },
+      {
+        "CombinedShorthandResolver:_resolvers_key": "urn:solid-server:entra:variable:autoProvision",
+        "CombinedShorthandResolver:_resolvers_value": { "@type": "KeyExtractor", "key": "entraAutoProvision", "defaultValue": true }
+      }
+    ]
+  }]
+}

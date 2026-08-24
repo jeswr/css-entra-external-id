@@ -1,0 +1,44 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/asynchronous-handlers/^1.0.0/components/context.jsonld"
+  ],
+  "@graph": [
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdStore",
+      "@type": "BaseEntraExternalIdStore",
+      "storage": { "@id": "urn:solid-server:default:AccountStorage" }
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdStateStorage",
+      "@type": "WrappedExpiringStorage",
+      "source": {
+        "@type": "ContainerPathStorage",
+        "relativePath": "/accounts/logins/entra-external-id/state/",
+        "source": { "@id": "urn:solid-server:default:KeyValueStorage" }
+      }
+    },
+    {
+      "@id": "urn:solid-server:default:EntraExternalIdTicketStorage",
+      "@type": "WrappedExpiringStorage",
+      "source": {
+        "@type": "ContainerPathStorage",
+        "relativePath": "/accounts/logins/entra-external-id/ticket/",
+        "source": { "@id": "urn:solid-server:default:KeyValueStorage" }
+      }
+    },
+    {
+      "comment": "Initialize the Entra external identity login store on the primary process.",
+      "@id": "urn:solid-server:default:PrimaryParallelInitializer",
+      "@type": "ParallelHandler",
+      "handlers": [{ "@id": "urn:solid-server:default:EntraExternalIdStore" }]
+    },
+    {
+      "comment": "Initialize the Entra external identity login store on workers.",
+      "@id": "urn:solid-server:default:EarlyProcessParallelInitializer",
+      "@type": "ParallelHandler",
+      "handlers": [{ "@id": "urn:solid-server:default:EntraExternalIdStore" }]
+    }
+  ]
+}

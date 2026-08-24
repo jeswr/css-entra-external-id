@@ -1,0 +1,47 @@
+{
+  "@context": [
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^8.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@jeswr/css-entra-external-id/^0.0.0/components/context.jsonld"
+  ],
+  "@graph": [{
+    "@id": "urn:solid-server-app-setup:default:CliExtractor",
+    "@type": "YargsCliExtractor",
+    "parameters": [
+      {
+        "@type": "YargsParameter",
+        "name": "entraAuthority",
+        "options": { "demandOption": true, "requiresArg": true, "type": "string", "describe": "Entra External ID authority URL." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraClientId",
+        "options": { "demandOption": true, "requiresArg": true, "type": "string", "describe": "Entra application client ID." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraClientSecret",
+        "options": { "requiresArg": true, "type": "string", "describe": "Entra application secret for development; prefer a certificate in production." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraClientCertificateThumbprint",
+        "options": { "requiresArg": true, "type": "string", "describe": "SHA-256 thumbprint of the Entra application certificate." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraClientCertificatePrivateKey",
+        "options": { "requiresArg": true, "type": "string", "describe": "PEM private key for the Entra application certificate; set through a protected environment value." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraExpectedIssuer",
+        "options": { "demandOption": true, "requiresArg": true, "type": "string", "describe": "Exact issuer expected in Entra ID tokens." }
+      },
+      {
+        "@type": "YargsParameter",
+        "name": "entraAutoProvision",
+        "options": { "type": "boolean", "describe": "Automatically create a CSS account for a new Entra identity." }
+      }
+    ]
+  }]
+}

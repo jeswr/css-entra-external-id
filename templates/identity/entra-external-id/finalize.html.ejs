@@ -1,0 +1,27 @@
+<h1>Completing login</h1>
+<p class="error" id="error"></p>
+<p id="progress">Returning to Community Solid Server…</p>
+
+<script>
+  (async() => {
+    try {
+      const nonceStorageKey = 'css-entra-external-id-browser-nonce';
+      const browserNonce = sessionStorage.getItem(nonceStorageKey);
+      sessionStorage.removeItem(nonceStorageKey);
+      const res = await postJson('', { browserNonce });
+      const body = await res.json();
+      if (!res.ok) {
+        throw new Error(body.message);
+      }
+      if (body.location) {
+        location.href = body.location;
+        return;
+      }
+      const controls = await fetchControls('<%= idpIndex %>');
+      location.href = controls.html.account.account;
+    } catch (error) {
+      setError(error.message);
+      setVisibility('progress', false);
+    }
+  })();
+</script>
